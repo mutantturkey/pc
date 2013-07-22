@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import curses
 import os
 import sys
@@ -23,7 +24,7 @@ input_buffer = ""
 cols = int(subprocess.check_output(["tput", "cols"]))
 rows = int(subprocess.check_output(["tput", "lines"]))
 
-def call_sed(string):
+def call_process(process, string):
   process = Popen(["sed", "-e", string], stdout=PIPE, stdin=PIPE, stderr=PIPE) 
   ret = process.communicate(input_buffer)
   if(process.returncode is not 0):
@@ -33,13 +34,18 @@ def call_sed(string):
   return
 
 
-def main():
+def main(argv):
 
   input_string = ""
   global input_buffer
 
-  for line in open(sys.argv[1], "r"):
-    input_buffer = input_buffer + line
+  try:
+    input_fh = open(argv[1], "r")
+    for line in input_fh:
+      input_buffer = input_buffer + line
+  except:
+    curses.endwin()
+    sys.exit("please specify a file")
   
   # init our screen
   screen.addstr("".ljust(cols), curses.color_pair(1));
@@ -60,7 +66,7 @@ def main():
         continue;
       elif(key == 13 or key == 10):
         screen.addstr(input_string.ljust(cols), curses.color_pair(1));
-        call_sed(input_string)
+        call_process("sed", input_string)
         screen.addstr("EOF")
         continue;
       else:
@@ -72,5 +78,5 @@ def main():
     curses.endwin()
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv))
 
