@@ -90,7 +90,10 @@ def main(argv):
   enable_array = [];
   pipe_array.append("");
   current_pipe = 0;
-
+  key = 0
+  
+  global cols
+  global rows 
   global input_buffer
 
   try:
@@ -110,7 +113,16 @@ def main(argv):
     while 1:
       key = screen.getch()
       screen.clear()
-      screen.addstr(rows - 1, 0, str(key) + " " + str(current_pipe))
+      screen.addstr(rows - 1, 0, argv[1] + " " + str(key) + " " + str(current_pipe))
+      if(key == 410):
+        cols = int(subprocess.check_output(["tput", "cols"]))
+        rows = int(subprocess.check_output(["tput", "lines"]))
+      # ENTER
+      if(key == 10):
+        pipe_array.insert(current_pipe+1, "")
+        current_pipe = current_pipe + 1
+        update(pipe_array, current_pipe)
+        continue 
       # UP
       if(key == 259):
         if(current_pipe is not 0):
@@ -132,11 +144,8 @@ def main(argv):
           if(current_pipe is not 0):
             del pipe_array[current_pipe]
             current_pipe = current_pipe - 1
-        draw_pipes(pipe_array, current_pipe)
-        screen.addstr(input_buffer)
-        screen.addstr("EOF")
+        update(pipe_array, current_pipe)
         continue;
-      # ENTER
       else:
         if(key < 256):
           pipe_array[current_pipe]+=chr(key)
