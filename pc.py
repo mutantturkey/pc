@@ -109,6 +109,7 @@ def main(argv):
   screen.addstr(input_buffer)
   screen.addstr("EOF")
 
+  screen.addstr(rows - 1, 0, argv[1] + " " + str(key) + " " + str(current_pipe))
   try: 
     while 1:
       key = screen.getch()
