@@ -13,9 +13,19 @@ curses.noecho()
 curses.cbreak()
 curses.curs_set(0)
 curses.start_color()
+screen.keypad(True);
 
+# default entry color
 curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_CYAN)
-curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_RED) 
+
+# default error color
+curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_RED) 
+
+# current entry color
+curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)
+
+# line number color, invert of entry 
+curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_WHITE)
 
 # our stdin input
 input_buffer = ""
